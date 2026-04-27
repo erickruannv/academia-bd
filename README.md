@@ -53,10 +53,6 @@ O banco é composto por **5 tabelas** relacionadas:
 | `matriculas` | Vínculo entre aluno e plano |
 | `pagamentos` | Registro de pagamentos das matrículas |
 
-### Diagrama ER
-
-![Diagrama ER](diagrama/der_academia.png)
-
 ---
 
 ## 🖥️ Funcionalidades
