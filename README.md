@@ -1,186 +1,91 @@
-# 🏋️ Academia FitLife — Sistema de Gestão
+Academia FitLife
 
-> Trabalho Acadêmico — Disciplina: Banco de Dados  
-> Tema: Gestão de Academia (alunos, planos, matrículas e pagamentos)
+**Aluno:** Erick Ruan Nunes Vieira  
+**Disciplina:** Banco de Dados  
+**Professor:** Anderson Costa
 
----
+## Sobre o projeto
 
-## 📋 Descrição
+Sistema desktop para gerenciar alunos, planos, matrículas e pagamentos de uma
+academia. O projeto evolui um CRUD anterior com interface gráfica e recursos
+do PostgreSQL usados para organizar consultas, calcular valores e registrar
+pagamentos.
 
-Sistema desktop desenvolvido em **Python com Tkinter** para gerenciar o cadastro de alunos, planos de assinatura, matrículas e pagamentos de uma academia. O sistema conta com tela de login, interface gráfica completa e integração com banco de dados **PostgreSQL**.
+## Tecnologias
 
----
+Python, Tkinter, psycopg2, PostgreSQL e pgAdmin.
 
-## 🗂️ Estrutura do Repositório
+## Funcionalidades
 
-```
-academia-bd/
-├── diagrama/
-│   └── der_academia.png        # Diagrama Entidade-Relacionamento
-├── ddl/
-│   └── criar_tabelas.sql       # Criação das tabelas e restrições
-├── dml/
-│   └── dados.sql               # Inserção, atualização e deleção de dados
-├── dql/
-│   └── consultas.sql           # Consultas com JOINs, filtros e ordenação
-├── src/
-│   └── main.py                 # Código-fonte da aplicação (Python + Tkinter)
-└── README.md
-```
+- Login e criação de conta.
+- Cadastro, busca, edição e exclusão de alunos.
+- Criação e gerenciamento de matrículas.
+- Registro e histórico de pagamentos.
+- Relatórios de matrículas, vencimentos e total pago por aluno.
 
----
+## Banco de dados
 
-## 🛠️ Tecnologias Utilizadas
+**SGBD:** PostgreSQL.
 
-| Tecnologia | Versão | Uso |
+**Tabelas principais:** usuarios, alunos, planos, matriculas e pagamentos.
+As matrículas relacionam alunos e planos; os pagamentos pertencem às matrículas.
+
+| Recurso | Finalidade | Uso na aplicação |
 |---|---|---|
-| Python | 3.10+ | Linguagem principal |
-| Tkinter | (nativo) | Interface gráfica |
-| psycopg2 | 2.9+ | Conector PostgreSQL |
-| PostgreSQL | 15+ | Banco de dados relacional |
+| View: vw_matriculas_alunos | Reunir aluno, plano e situação da matrícula | Listagem de matrículas |
+| Function: fn_total_pago_aluno | Receber o ID do aluno e retornar o total pago | Consulta na aba Relatórios |
+| Procedure: pr_registrar_pagamento | Validar matrícula, valor e forma antes de gravar | Registro na aba Pagamentos |
 
----
+Os três recursos são chamados pelo Python e utilizados efetivamente pela interface.
 
-## 🗄️ Modelo de Dados
+## Como executar
 
-O banco é composto por **5 tabelas** relacionadas:
+1. Instale Python com Tkinter e PostgreSQL.
+2. No pgAdmin, crie um banco chamado **academia**.
+3. No Query Tool desse banco, execute os arquivos nesta ordem:
 
-| Tabela | Descrição |
-|---|---|
-| `usuarios` | Usuários do sistema (autenticação) |
-| `alunos` | Alunos cadastrados na academia |
-| `planos` | Planos de assinatura disponíveis |
-| `matriculas` | Vínculo entre aluno e plano |
-| `pagamentos` | Registro de pagamentos das matrículas |
-
----
-
-## 🖥️ Funcionalidades
-
-### Autenticação
-- Tela de login com validação no banco de dados
-
-### Gerenciamento de Alunos (CRUD completo)
-- Cadastrar novo aluno
-- Listar todos os alunos (com ordenação e filtro por nome/CPF)
-- Atualizar dados de um aluno
-- Excluir aluno (com exclusão em cascata das matrículas e pagamentos)
-
-### Gerenciamento de Matrículas
-- Criar nova matrícula vinculando aluno a um plano
-- Filtrar matrículas por status (ATIVA / CANCELADA / VENCIDA)
-- Atualizar status da matrícula
-- Remover matrícula
-
-### Pagamentos
-- Registrar pagamento vinculado a uma matrícula ativa
-- Selecionar forma de pagamento (PIX / CARTÃO / DINHEIRO)
-- Visualizar histórico de pagamentos
-
-### Relatórios (Consultas com JOIN)
-- **Matrículas ativas** — usa `INNER JOIN` entre alunos, matrículas e planos
-- **Todos os alunos** — usa `LEFT JOIN` (inclui alunos sem matrícula)
-- **Histórico de pagamentos** — usa `INNER JOIN + LEFT JOIN`
-- **Vencendo em 30 dias** — usa `INNER JOIN` com filtro `BETWEEN`
-
----
-
-## ⚙️ Como Executar
-
-### 1. Pré-requisitos
-
-- Python 3.10 ou superior
-- PostgreSQL 15 instalado e em execução
-- pip
-
-### 2. Instalar dependências Python
-
-```bash
-pip install psycopg2-binary
+```text
+Banco_de_dados/ddl/criar_tabelas.sql
+Banco_de_dados/dml/dados.sql
+Banco_de_dados/ddl/view.sql
+Banco_de_dados/ddl/function.sql
+Banco_de_dados/ddl/procedure.sql
 ```
 
-### 3. Criar o banco de dados
+Se o banco já estiver preparado, não repita os scripts de tabelas e dados.
+O arquivo dados.sql já cadastra os planos; não é necessário executar planos.sql.
 
-No `psql` (ou pgAdmin), execute:
+4. Confira a conexão em projeto/src/conexao.py. No ambiente de desenvolvimento:
+   **127.0.0.1**, porta **5433**, banco **academia**, usuário **postgres**.
+5. Na pasta principal do projeto, instale a dependência e execute:
 
-```sql
-CREATE DATABASE academia;
+```powershell
+python -m pip install psycopg2-binary
+python projeto/src/main.py
 ```
 
-### 4. Criar as tabelas
+A senha do PostgreSQL é solicitada em uma janela e mantida somente na memória.
+Para entrar no sistema, crie uma conta ou use **admin / admin123**, dos dados iniciais.
 
-```bash
-psql -U postgres -d academia -f ddl/criar_tabelas.sql
-```
+## Organização
 
-### 5. Inserir dados iniciais
+- **Banco_de_dados/**: scripts SQL e diagrama.
+- **projeto/src/**: interface, conexão e operações em Python.
+- **docs/**: portfólio do projeto.
 
-```bash
-psql -U postgres -d academia -f dml/dados.sql
-```
+## Portfólio
 
-### 6. Configurar a conexão (se necessário)
+O projeto demonstra modelagem relacional, consultas com JOIN, rotinas SQL
+e integração entre aplicação e banco de dados. Foi desenvolvido com auxílio
+de IA, com estudo e testes manuais do autor.
 
-Abra o arquivo `src/main.py` e ajuste as configurações de conexão no início do arquivo:
+[Portfólio em PDF](docs/Portfolio_Banco_de_Dados.pdf)
 
-```python
-DB_CONFIG = {
-    "host":     "localhost",
-    "database": "academia",
-    "user":     "postgres",
-    "password": "root"       # <- altere para sua senha
-}
-```
+**Repositório:** https://github.com/erickruannv/academia-bd  
+## Vídeo explicativo
 
-### 7. Executar a aplicação
+Demonstração do sistema e dos recursos de banco de dados: View, Function e Procedure.
 
-```bash
-python src/main.py
-```
+**Link do vídeo:** COLE_O_LINK_AQUI
 
-### Login padrão
-
-| Campo | Valor |
-|---|---|
-| Usuário | `admin` |
-| Senha | `admin123` |
-
----
-
-## 🔍 Exemplos de Consultas SQL
-
-### INNER JOIN — Matrículas ativas
-
-```sql
-SELECT a.nome, p.nome_plano, m.data_inicio, m.data_fim, m.status
-FROM matriculas m
-INNER JOIN alunos a ON m.id_aluno = a.id_aluno
-INNER JOIN planos p ON m.id_plano = p.id_plano
-WHERE m.status = 'ATIVA'
-ORDER BY a.nome;
-```
-
-### LEFT JOIN — Todos os alunos (com ou sem matrícula)
-
-```sql
-SELECT a.nome, a.email,
-       COALESCE(p.nome_plano, 'Sem plano') AS plano,
-       COALESCE(m.status, '—')             AS status
-FROM alunos a
-LEFT JOIN matriculas m ON a.id_aluno = m.id_aluno
-LEFT JOIN planos p     ON m.id_plano = p.id_plano
-ORDER BY a.nome;
-```
-
----
-
-## 🎬 Vídeo Demonstrativo
-
-> Link: https://youtu.be/cmB5e1HSQ58
-
----
-
-## 👤 Autor
-
-**Erick Ruan Nunes Vieira**  
-Disciplina: Banco de Dados — Prof. Anderson Costa  
+Vídeo pendente de gravação. Depois de publicar, substitua COLE_O_LINK_AQUI pelo link.

@@ -1,19 +1,5 @@
-import psycopg2
-
-def conectar():
-    return psycopg2.connect(host="localhost", database="academia", user="postgres", password="root")
-
-def login():
-    print("=== LOGIN ===")
-    usuario = input("Usuario: ")
-    senha = input("Senha: ")
-    conn = conectar()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM usuarios WHERE login = %s AND senha = %s", (usuario, senha))
-    resultado = cur.fetchone()
-    cur.close()
-    conn.close()
-    return resultado is not None
+from conexao import conectar
+from interface import iniciar
 
 def cadastrar_aluno():
     print("\n--- Cadastrar Aluno ---")
@@ -297,25 +283,8 @@ def menu_consultas():
         elif op == "0": break
 
 def main():
-    print("=== SISTEMA DE GESTAO DE ACADEMIA ===")
-    if not login():
-        print("Acesso negado.")
-        return
+    # Tela de login em Tkinter; os menus abaixo ainda serao migrados para a interface
+    iniciar()
 
-    while True:
-        print("\n=== MENU PRINCIPAL ===")
-        print("1 - Alunos")
-        print("2 - Matriculas")
-        print("3 - Pagamentos")
-        print("4 - Consultas")
-        print("0 - Sair")
-        op = input("Opcao: ")
-        if op == "1": menu_alunos()
-        elif op == "2": menu_matriculas()
-        elif op == "3": menu_pagamentos()
-        elif op == "4": menu_consultas()
-        elif op == "0":
-            print("Saindo...")
-            break
-
-main()
+if __name__ == "__main__":
+    main()
