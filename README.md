@@ -86,6 +86,4 @@ de IA, com estudo e testes manuais do autor.
 
 Demonstração do sistema e dos recursos de banco de dados: View, Function e Procedure.
 
-**Link do vídeo:** COLE_O_LINK_AQUI
-
-Vídeo pendente de gravação. Depois de publicar, substitua COLE_O_LINK_AQUI pelo link.
+**Link do vídeo:** https://youtu.be/iFHY-ydyVSM
